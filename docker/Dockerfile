@@ -8,4 +8,4 @@ FROM alpine:3.22
 WORKDIR /app
 COPY --from=builder /src/pocketbase .
 EXPOSE 8080
-CMD ["./pocketbase"]
+CMD ["/app/pocketbase","serve"]
