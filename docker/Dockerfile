@@ -7,5 +7,4 @@ RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
 FROM alpine:3.22
 WORKDIR /app
 COPY --from=builder /src/pocketbase .
-EXPOSE 8080
 CMD ["/app/pocketbase","serve"]
