@@ -16,20 +16,15 @@ jobs:
         id: vars
         run: echo "sha_tag=${GITHUB_SHA::7}" >> $GITHUB_OUTPUT
 
-      - name: Build Go app
-        run: |
-          GOOS=linux GOARCH=amd64 CGO_ENABLED=0 \
-          go build -o myapp examples/base/main.go
-
       - name: Docker login
         run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
 
       - name: Build and push image
         run: |
-          IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/my-go-app
+          IMAGE_NAME=${{ secrets.DOCKERHUB_USERNAME }}/pocketbase
           SHA_TAG=${{ steps.vars.outputs.sha_tag }}
           
-          docker build -t $IMAGE_NAME:$SHA_TAG -t $IMAGE_NAME:latest .
+          docker build -f docker/Dockerfile -t $IMAGE_NAME:$SHA_TAG -t $IMAGE_NAME:latest .
           
           docker push $IMAGE_NAME:$SHA_TAG
           docker push $IMAGE_NAME:latest
